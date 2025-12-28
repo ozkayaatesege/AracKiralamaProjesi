@@ -1,0 +1,11 @@
+package proje;
+
+public interface Rentable {
+	void rent(Customer customer,int days);
+	
+	void returnCar();
+	
+	boolean isAvailable();
+	
+	double calculatePrice(int days);
+}
