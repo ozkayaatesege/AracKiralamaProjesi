@@ -1,0 +1,55 @@
+package proje;
+
+public abstract class Car implements Rentable {
+	private String plakaKodu;
+	private String model;
+	private double gunlukFiyat;
+	private boolean kiralandi;
+	
+	public Car(String plakaKodu,String model,double gunlukFiyat) {
+		this.plakaKodu=plakaKodu;
+		this.model=model;
+		this.kiralandi=kiralandi;
+		this.gunlukFiyat=gunlukFiyat;
+		
+	}
+	
+	@Override
+	public void rent(Customer customer,int days) {
+		if(!kiralandi) {
+			this.kiralandi=true;
+			double toplamUcret=calculatePrice(days);
+			System.out.println("------------------------------------------");
+			System.out.println("KİRALAMA İŞLEMİ BASARILI...");
+			System.out.println("Araç:"+model+"("+plakaKodu+")");
+			System.out.println("Müşteri:"+customer.getName());
+			System.out.println("Süre:"+days+" gün");
+			System.out.println("Toplam tutar:"+toplamUcret+" TL");
+			System.out.println("------------------------------------------");
+		}
+		else {
+			System.out.println("Hata: "+model+" zaten şu an kiralandı...");
+		}
+	}
+	
+	public abstract double calculatePrice(int days);
+	
+	@Override
+	public void returnCar() {
+        if (kiralandi) {
+            this.kiralandi = false;
+            System.out.println(model + " (" + plakaKodu + ") başarıyla iade alındı.");
+        } else {
+            System.out.println("HATA: Bu araç zaten galeride, iade alamazsınız...");
+        }
+    }
+	
+	@Override
+	public boolean isAvailable() {
+        return !kiralandi;
+    }
+    
+    public String getPlakaKodu() { return plakaKodu; }
+    public String getModel() { return model; }
+    public double getGunlukFiyat() { return gunlukFiyat; }
+}
