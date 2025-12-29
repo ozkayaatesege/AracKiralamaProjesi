@@ -30,10 +30,14 @@ public class CarInventory {
                 System.out.println("Günlük Fiyat: " + car.getGunlukFiyat() + " TL");
                 
                 if (car instanceof ElectricCar) {
+                	ElectricCar ec=(ElectricCar) car;
                     System.out.println("Tip: Elektrikli (Çevreci!)");
+                    System.out.println("Batarya: "+ec.getBataryaKapasitesi()+ " kWh");
                 } 
                 else if (car instanceof GasCar) {
+                    GasCar gc = (GasCar) car;
                     System.out.println("Tip: Benzinli");
+                    System.out.println("Depo: " + gc.getDepoKapasitesi() + " Litre");
                 }
                 
                 System.out.println("-----------------------------");

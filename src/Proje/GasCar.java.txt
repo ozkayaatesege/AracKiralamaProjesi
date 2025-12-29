@@ -12,4 +12,6 @@ public class GasCar extends Car{
     public double calculatePrice(int days) {
         return getGunlukFiyat() * days;
     }
+    public double getDepoKapasitesi() {return depoKapasitesi;}
 }
+
