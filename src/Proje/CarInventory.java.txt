@@ -1,0 +1,57 @@
+package proje;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CarInventory {
+   
+    private List<Car> cars;
+
+    public CarInventory() {
+        this.cars = new ArrayList<>();
+    }
+
+    
+    public void addCar(Car car) {
+        cars.add(car);
+        System.out.println("Galeriye eklendi: " + car.getModel());
+    }
+
+    
+    public void listAvailableCars() {
+        System.out.println("\n--- MÜSAİT ARAÇLAR LİSTESİ ---");
+        boolean found = false;
+        
+        for (Car car : cars) {
+            if (car.isAvailable()) {
+                System.out.println("-----------------------------");
+                System.out.println("Model: " + car.getModel());
+                System.out.println("Plaka: " + car.getPlakaKodu());
+                System.out.println("Günlük Fiyat: " + car.getGunlukFiyat() + " TL");
+                
+                if (car instanceof ElectricCar) {
+                    System.out.println("Tip: Elektrikli (Çevreci!)");
+                } 
+                else if (car instanceof GasCar) {
+                    System.out.println("Tip: Benzinli");
+                }
+                
+                System.out.println("-----------------------------");
+                found = true;
+            }
+        }
+        
+        if (!found) {
+            System.out.println("Maalesef şu an hiç müsait araç yok.");
+        }
+    }
+    
+    public Car getCarByPlate(String plaka) {
+        for (Car car : cars) {
+            if (car.getPlakaKodu().equals(plaka)) {
+                return car;
+            }
+        }
+        return null;
+    }
+}
