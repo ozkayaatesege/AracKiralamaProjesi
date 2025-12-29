@@ -1,0 +1,15 @@
+package proje;
+
+public class ElectricCar extends Car{
+	private int bataryaKapasitesi;
+	
+	public ElectricCar(String plakaKodu,String model,double gunlukFiyat,int bataryaKapasitesi) {
+		super(plakaKodu,model,gunlukFiyat);
+		this.bataryaKapasitesi=bataryaKapasitesi;
+	}
+	
+	public double calculatePrice(int days) {
+		double fiyat=getGunlukFiyat() * days;
+		return fiyat*0.8;  
+	}
+}
