@@ -1,0 +1,15 @@
+package proje;
+
+public class GasCar extends Car{
+	private double depoKapasitesi; 
+
+    public GasCar(String plateNumber, String model, double basePricePerDay, double depoKapasitesi) {
+        super(plateNumber, model, basePricePerDay);
+        this.depoKapasitesi = depoKapasitesi;
+    }
+
+    @Override
+    public double calculatePrice(int days) {
+        return getGunlukFiyat() * days;
+    }
+}
