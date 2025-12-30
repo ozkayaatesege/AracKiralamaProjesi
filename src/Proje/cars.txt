@@ -1,0 +1,15 @@
+Gas,34 ABC 10,Fiat Egea,800,45
+Gas,06 ANK 99,Ford Focus,1200,50
+Electric,34 EV 001,Tesla Model Y,2500,75
+Electric,10 TOG 10,Togg T10X,1800,88
+Gas,35 IZM 35,BMW 320,3000,60
+Electric,07 ANT 07,Porsche Taycan,5000,93
+Gas,34 GS 1905,Audi A5,4500,85
+Gas,35 EGE 1905,Ferrari SF90,40000,100
+Gas,34 ABC 2005,Ford Mustang,15000,88
+Electric,06 ANK 1234,BMW i5,5000,78
+Gas,35 CEV 944,Nisan Quashqai,2200,111
+Gas,01 ADN 01,Volkswagen Golf 8r,4700,83
+Gas,34 CLV 744,Seat Ateca,2000,120
+Gas,34 VYZ 999,Cupra Formentor,3500,92
+Gas,34 AA 123,Renault Clio,1500,66 
