@@ -106,7 +106,7 @@ public class Main {
     private static void addNewCarProcess() {
         System.out.println("\n--- YENİ ARAÇ EKLEME ---");
         System.out.print("Plaka: ");
-        String plaka = scanner.nextLine();
+        String plaka = scanner.nextLine().trim().toUpperCase();
         System.out.print("Model: ");
         String model = scanner.nextLine();
         
@@ -138,7 +138,7 @@ public class Main {
     private static void deleteCarProcess() {
         System.out.println("\n--- ARAÇ SİLME ---");
         System.out.print("Silinecek aracın plakası: ");
-        String silPlaka = scanner.nextLine();
+        String silPlaka = scanner.nextLine().trim().toUpperCase();
         inventory.deleteCar(silPlaka);
     }
 }
