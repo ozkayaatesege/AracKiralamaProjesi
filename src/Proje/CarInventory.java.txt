@@ -58,4 +58,15 @@ public class CarInventory {
         }
         return null;
     }
+    public boolean deleteCar(String plaka) {
+        for (Car car : cars) {
+            if (car.getPlakaKodu().equalsIgnoreCase(plaka)) {
+                cars.remove(car);
+                System.out.println(plaka + " plakalı araç sistemden silindi.");
+                return true;
+            }
+        }
+        System.out.println("HATA: " + plaka + " plakalı araç bulunamadı!");
+        return false;
+    }
 }
