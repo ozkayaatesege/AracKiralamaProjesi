@@ -52,4 +52,13 @@ public abstract class Car implements Rentable {
     public String getPlakaKodu() { return plakaKodu; }
     public String getModel() { return model; }
     public double getGunlukFiyat() { return gunlukFiyat; }
+    	
+    public void setGunlukFiyat(double gunlukFiyat) {
+        if (gunlukFiyat > 0) {
+            this.gunlukFiyat = gunlukFiyat;
+            System.out.println(model + " aracının yeni fiyatı: " + gunlukFiyat + " TL");
+        } else {
+            System.out.println("HATA: Fiyat negatif olamaz!");
+        }
+    }
 }
