@@ -1,0 +1,144 @@
+package proje;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.Scanner;
+
+public class Main {
+    
+    private static CarInventory inventory = new CarInventory();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        System.out.println("Sistem başlatılıyor...");
+        
+        
+        loadCarsFromFile();
+
+        System.out.println("=========================================");
+        System.out.println("   ARAÇ KİRALAMA OTOMASYONU");
+        System.out.println("=========================================");
+
+        boolean exit = false;
+        while (!exit) {
+            System.out.println("\n--- ANA MENÜ ---");
+            System.out.println("1 - Müsait Araçları Listele");
+            System.out.println("2 - Araç Kirala");
+            System.out.println("3 - Araç İade Et");
+            System.out.println("4 - Yeni Araç Ekle");
+            System.out.println("5 - Araç Sil");
+            System.out.println("0 - Çıkış");
+            System.out.print("Seçiminiz: ");
+
+            int choice = -1;
+            try {
+                String input = scanner.nextLine();
+                if(input.isEmpty()) continue;
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("HATA: Lütfen sayısal bir değer giriniz!");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    inventory.listAvailableCars();
+                    break;
+                case 2:
+                    System.out.println(">> [Sistem] Kiralama modülü yapım aşamasında.");
+                    break;
+                case 3:
+                    System.out.println(">> [Sistem] İade modülü yapım aşamasında.");
+                    break;
+                case 4:
+                     addNewCarProcess();
+                     break;
+                case 5:
+                    deleteCarProcess();
+                    break;
+                case 0:
+                    System.out.println("Çıkış yapılıyor...");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Geçersiz seçim!");
+            }
+        }
+    }
+
+    // --- YARDIMCI METOTLAR ---
+
+    private static void loadCarsFromFile() {
+        File file = new File("Araclar.txt"); 
+        
+        if (!file.exists()) {
+            System.out.println("Bilgi: Kayıtlı araç dosyası bulunamadı, liste boş başlıyor.");
+            return;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue; 
+
+                String[] data = line.split(",");
+                // Plaka, Model, Tip, Fiyat, Kapasite
+                String plaka = data[0].trim();
+                String model = data[1].trim();
+                String type = data[2].trim();
+                double fiyat = Double.parseDouble(data[3].trim());
+
+                if (type.equalsIgnoreCase("Gas")) {
+                    double depo = Double.parseDouble(data[4].trim());
+                    inventory.addCar(new GasCar(plaka, model, fiyat, depo));
+                } else if (type.equalsIgnoreCase("Electric")) {
+                    int batarya = Integer.parseInt(data[4].trim());
+                    inventory.addCar(new ElectricCar(plaka, model, fiyat, batarya));
+                }
+            }
+            System.out.println(">> Veriler başarıyla yüklendi.");
+        } catch (Exception e) {
+            System.out.println("HATA: Dosya okunurken sorun oluştu: " + e.getMessage());
+        }
+    }
+
+    private static void addNewCarProcess() {
+        System.out.println("\n--- YENİ ARAÇ EKLEME ---");
+        System.out.print("Plaka: ");
+        String plaka = scanner.nextLine();
+        System.out.print("Model: ");
+        String model = scanner.nextLine();
+        
+        double fiyat = 0;
+        try {
+            System.out.print("Günlük Fiyat: ");
+            fiyat = Double.parseDouble(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Hatalı fiyat girişi!");
+            return;
+        }
+        
+        System.out.print("Tip (1: Benzinli, 2: Elektrikli): ");
+        String tipSecim = scanner.nextLine();
+        
+        if (tipSecim.equals("1")) {
+            System.out.print("Depo Kapasitesi (Litre): ");
+            double depo = Double.parseDouble(scanner.nextLine());
+            inventory.addCar(new GasCar(plaka, model, fiyat, depo));
+        } else if (tipSecim.equals("2")) {
+            System.out.print("Batarya Kapasitesi (kWh): ");
+            int batarya = Integer.parseInt(scanner.nextLine());
+            inventory.addCar(new ElectricCar(plaka, model, fiyat, batarya));
+        } else {
+            System.out.println("Geçersiz tip seçimi.");
+        }
+    }
+
+    private static void deleteCarProcess() {
+        System.out.println("\n--- ARAÇ SİLME ---");
+        System.out.print("Silinecek aracın plakası: ");
+        String silPlaka = scanner.nextLine();
+        inventory.deleteCar(silPlaka);
+    }
+}
