@@ -1,0 +1,43 @@
+package proje;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class Payment {
+    private double amount; 
+    private String currency; 
+    private boolean isPaid; 
+
+    public Payment(double amount) {
+        this.amount = amount;
+        this.currency = "TL";
+        this.isPaid = false;
+    }
+
+
+    public boolean processPayment(String cardHolderName, String cardNumber) {
+        System.out.println("\n--- ÖDEME SİSTEMİ ---");
+        System.out.println("Bankaya bağlanılıyor...");
+        
+        if (cardNumber != null && !cardNumber.isEmpty() && cardNumber.length() >= 16) {
+            this.isPaid = true;
+            System.out.println("BAŞARILI: " + cardHolderName + " kartından " + amount + " " + currency + " çekildi.");
+            printReceipt(); 
+            return true;
+        } else {
+            System.out.println("HATA: Kart numarası geçersiz! İşlem reddedildi.");
+            return false;
+        }
+    }
+
+    private void printReceipt() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        System.out.println("\n******************************");
+        System.out.println("         ÖDEME FİŞİ");
+        System.out.println("******************************");
+        System.out.println("Tarih: " + dtf.format(LocalDateTime.now()));
+        System.out.println("Tutar: " + amount + " " + currency);
+        System.out.println("Durum: ONAYLANDI");
+        System.out.println("******************************\n");
+    }
+}
