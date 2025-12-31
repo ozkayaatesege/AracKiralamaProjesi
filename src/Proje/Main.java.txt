@@ -13,7 +13,6 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Sistem başlatılıyor...");
         
-        
         loadCarsFromFile();
 
         System.out.println("=========================================");
@@ -46,14 +45,45 @@ public class Main {
                     inventory.listAvailableCars();
                     break;
                 case 2:
-                    System.out.println(">> [Sistem] Kiralama modülü yapım aşamasında.");
+                    System.out.println("\n--- ARAÇ KİRALAMA ---");
+                    System.out.print("Kiralanacak aracın plakası: ");
+                    String targetPlate = scanner.nextLine().trim().toUpperCase();
+
+                    Car selectedCar = inventory.findCar(targetPlate);
+
+                    if (selectedCar != null) {
+                        if (!selectedCar.isAvailable()) {
+                            System.out.println("HATA: Bu araç şu anda kirada.");
+                        } else {
+                            System.out.print("Müşteri Adı Soyadı: ");
+                            String customerName = scanner.nextLine();
+
+                            System.out.print("Kaç gün kiralanacak?: ");
+                            int days = 0;
+                            try {
+                                days = Integer.parseInt(scanner.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("Hatalı gün girişi.");
+                                break;
+                            }
+
+                            System.out.print("Kredi Kartı No: ");
+                            String cardNumber = scanner.nextLine();
+
+                            Customer customer = new Customer(customerName);
+                            Rental rental = new Rental(selectedCar, customer, days);
+                            rental.executeRental(cardNumber);
+                        }
+                    } else {
+                        System.out.println("HATA: Belirtilen plakada araç bulunamadı.");
+                    }
                     break;
                 case 3:
                     System.out.println(">> [Sistem] İade modülü yapım aşamasında.");
                     break;
                 case 4:
-                     addNewCarProcess();
-                     break;
+                      addNewCarProcess();
+                      break;
                 case 5:
                     deleteCarProcess();
                     break;
@@ -66,8 +96,6 @@ public class Main {
             }
         }
     }
-
-    // --- YARDIMCI METOTLAR ---
 
     private static void loadCarsFromFile() {
         File file = new File("Araclar.txt"); 
@@ -83,7 +111,6 @@ public class Main {
                 if (line.trim().isEmpty()) continue; 
 
                 String[] data = line.split(",");
-                // Plaka, Model, Tip, Fiyat, Kapasite
                 String plaka = data[0].trim();
                 String model = data[1].trim();
                 String type = data[2].trim();
