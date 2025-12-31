@@ -48,6 +48,10 @@ public abstract class Car implements Rentable {
 	public boolean isAvailable() {
         return !kiralandi;
     }
+	
+	public void setAvailable(boolean isAvailable) {
+        this.kiralandi = !isAvailable;
+    }
     
     public String getPlakaKodu() { return plakaKodu; }
     public String getModel() { return model; }
@@ -61,4 +65,5 @@ public abstract class Car implements Rentable {
             System.out.println("HATA: Fiyat negatif olamaz!");
         }
     }
+    
 }
