@@ -1,5 +1,11 @@
 package proje;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 public class Rental {
     private Car car;
     private Customer customer;
@@ -13,22 +19,46 @@ public class Rental {
         this.totalPrice = car.calculatePrice(days);
     }
 
+
     public boolean executeRental(String creditCardNumber) {
         System.out.println(">>> Kiralama işlemi başlatılıyor...");
+
 
         Payment payment = new Payment(totalPrice);
         boolean paymentSuccess = payment.processPayment(customer.getName(), creditCardNumber);
 
         if (paymentSuccess) {
+
             car.rent(customer, days);
-            return true;
+
+            // 3. Dosyaya Logla
+            saveToLogFile();
+            
+            return true; // İşlem başarılı
         } else {
             System.out.println("HATA: Ödeme alınamadığı için kiralama yapılamadı.");
-            return false;
+            return false; 
         }
     }
 
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    
+    private void saveToLogFile() {
+        try (FileWriter writer = new FileWriter("kiralama_gecmisi.txt", true)) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            String zaman = dtf.format(LocalDateTime.now());
+
+            String kayit = String.format("TARİH: %s | MÜŞTERİ: %s | ARAÇ: %s (%s) | GÜN: %d | TUTAR: %.2f TL\n",
+                    zaman, customer.getName(), car.getModel(), car.getPlakaKodu(), days, totalPrice);
+
+            writer.write(kayit);
+            System.out.println(">>> İşlem 'kiralama_gecmisi.txt' dosyasına kaydedildi.");
+            
+        } catch (IOException e) {
+            System.out.println("Log dosyasına yazılırken hata oluştu: " + e.getMessage());
+        }
     }
 }
