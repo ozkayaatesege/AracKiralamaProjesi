@@ -31,10 +31,9 @@ public class Rental {
 
             car.rent(customer, days);
 
-            // 3. Dosyaya Logla
             saveToLogFile();
             
-            return true; // İşlem başarılı
+            return true; 
         } else {
             System.out.println("HATA: Ödeme alınamadığı için kiralama yapılamadı.");
             return false; 
@@ -42,10 +41,17 @@ public class Rental {
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        double rawPrice = car.calculatePrice(days);
+        
+        if (days >= 5) {
+            System.out.println(">> (Süper Fırsat! 5+ gün kiraladığınız için %10 indirim uygulandı.)");
+            return rawPrice * 0.90;
+        }
+        // -----------------------
+        
+        return rawPrice;
     }
 
-    
     private void saveToLogFile() {
         try (FileWriter writer = new FileWriter("kiralama_gecmisi.txt", true)) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

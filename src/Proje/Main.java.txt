@@ -207,7 +207,6 @@ public class Main {
             System.out.print("Günlük Fiyat: ");
             double fiyat = Double.parseDouble(scanner.nextLine());
 
-            // Değişiklik Buradan Başlıyor: Nesneyi önce oluştur, sonra kaydet.
             Car newCar = null;
 
             if (type.equalsIgnoreCase("Gas")) {
@@ -221,15 +220,11 @@ public class Main {
                 newCar = new ElectricCar(plaka, model, fiyat, batarya);
             } else {
                 System.out.println("Geçersiz araç tipi! (Gas veya Electric giriniz)");
-                return; // Geçersizse işlem yapma
+                return; 
             }
             
-            // Eğer araç başarıyla oluşturulduysa:
             if (newCar != null) {
-                // 1. Listeye ekle (Program çalışırken görünsün)
                 inventory.addCar(newCar);
-                
-                // 2. Dosyaya yaz (Kapatıp açınca silinmesin)
                 saveCarToFile(newCar);
             }
 
@@ -246,10 +241,8 @@ public class Main {
         System.out.print("Silinecek aracın plakası: ");
         String plaka = scanner.nextLine().trim().toUpperCase();
         
-        // 1. Önce programın hafızasındaki listeden sil
         boolean isDeleted = inventory.deleteCar(plaka);
         
-        // 2. Eğer listeden silme başarılıysa, dosyadan da sil
         if (isDeleted) {
             deleteCarFromFile(plaka);
         }
@@ -278,18 +271,15 @@ public class Main {
         File file = new File("cars.txt");
         List<String> remainingLines = new ArrayList<>();
 
-        // 1. ADIM: Dosyayı oku, silinecek araç HARİÇ diğerlerini listeye al
         try (Scanner fileScanner = new Scanner(file)) {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 if (line.trim().isEmpty()) continue;
 
-                // Satırı parçala ve plakayı kontrol et
                 String[] data = line.split(",");
                 if (data.length >= 2) {
                     String currentPlaka = data[1].trim();
                     
-                    // Eğer bu satırdaki plaka, silmek istediğimiz plaka DEĞİLSE listeye ekle
                     if (!currentPlaka.equalsIgnoreCase(targetPlaka)) {
                         remainingLines.add(line);
                     }
@@ -300,10 +290,9 @@ public class Main {
             return;
         }
 
-        // 2. ADIM: Dosyayı SIFIRDAN (append: false) tekrar yaz
         try (FileWriter writer = new FileWriter("cars.txt", false)) { 
             for (String line : remainingLines) {
-                writer.write(line + "\n"); // Her satırdan sonra alt satıra geç
+                writer.write(line + "\n"); 
             }
             System.out.println(">> [Sistem] Dosya güncellendi, araç kayıtlardan tamamen silindi.");
         } catch (IOException e) {
