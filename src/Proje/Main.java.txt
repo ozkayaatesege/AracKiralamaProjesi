@@ -2,6 +2,10 @@ package proje;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -203,17 +207,32 @@ public class Main {
             System.out.print("Günlük Fiyat: ");
             double fiyat = Double.parseDouble(scanner.nextLine());
 
+            // Değişiklik Buradan Başlıyor: Nesneyi önce oluştur, sonra kaydet.
+            Car newCar = null;
+
             if (type.equalsIgnoreCase("Gas")) {
                 System.out.print("Depo Kapasitesi (Litre): ");
                 double depo = Double.parseDouble(scanner.nextLine());
-                inventory.addCar(new GasCar(plaka, model, fiyat, depo));
+                newCar = new GasCar(plaka, model, fiyat, depo);
+                
             } else if (type.equalsIgnoreCase("Electric")) {
                 System.out.print("Batarya Kapasitesi (kWh): ");
                 int batarya = Integer.parseInt(scanner.nextLine());
-                inventory.addCar(new ElectricCar(plaka, model, fiyat, batarya));
+                newCar = new ElectricCar(plaka, model, fiyat, batarya);
             } else {
                 System.out.println("Geçersiz araç tipi! (Gas veya Electric giriniz)");
+                return; // Geçersizse işlem yapma
             }
+            
+            // Eğer araç başarıyla oluşturulduysa:
+            if (newCar != null) {
+                // 1. Listeye ekle (Program çalışırken görünsün)
+                inventory.addCar(newCar);
+                
+                // 2. Dosyaya yaz (Kapatıp açınca silinmesin)
+                saveCarToFile(newCar);
+            }
+
         } catch (NumberFormatException e) {
             System.out.println("HATA: Sayısal değer girmeniz gereken yerde harf girdiniz.");
         } catch (Exception e) {
@@ -227,6 +246,68 @@ public class Main {
         System.out.print("Silinecek aracın plakası: ");
         String plaka = scanner.nextLine().trim().toUpperCase();
         
-        boolean result = inventory.deleteCar(plaka);
+        // 1. Önce programın hafızasındaki listeden sil
+        boolean isDeleted = inventory.deleteCar(plaka);
+        
+        // 2. Eğer listeden silme başarılıysa, dosyadan da sil
+        if (isDeleted) {
+            deleteCarFromFile(plaka);
+        }
+    }
+    
+    private static void saveCarToFile(Car car) {
+    	try (FileWriter fw=new FileWriter("cars.txt",true)){
+    		String line="";
+    		
+    		if(car instanceof GasCar) {
+    			GasCar gc=(GasCar) car;
+    			line="Gas,"+ gc.getPlakaKodu()+","+ gc.getModel()+","+gc.getGunlukFiyat()+","+gc.getDepoKapasitesi();
+    		}else if(car instanceof ElectricCar) {
+    			ElectricCar ec=(ElectricCar) car;
+    			line="Electric,"+ ec.getPlakaKodu()+","+ec.getModel()+","+ec.getGunlukFiyat()+","+ec.getBataryaKapasitesi();
+    		}
+    		fw.write(line+"\n");
+            System.out.println(">> [Sistem] Araç 'cars.txt' dosyasına kalıcı olarak kaydedildi.");
+    	}
+    	catch (IOException e) {
+            System.out.println("HATA: Dosyaya yazarken sorun oluştu: " + e.getMessage());
+        }
+    }
+    
+    private static void deleteCarFromFile(String targetPlaka) {
+        File file = new File("cars.txt");
+        List<String> remainingLines = new ArrayList<>();
+
+        // 1. ADIM: Dosyayı oku, silinecek araç HARİÇ diğerlerini listeye al
+        try (Scanner fileScanner = new Scanner(file)) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                if (line.trim().isEmpty()) continue;
+
+                // Satırı parçala ve plakayı kontrol et
+                String[] data = line.split(",");
+                if (data.length >= 2) {
+                    String currentPlaka = data[1].trim();
+                    
+                    // Eğer bu satırdaki plaka, silmek istediğimiz plaka DEĞİLSE listeye ekle
+                    if (!currentPlaka.equalsIgnoreCase(targetPlaka)) {
+                        remainingLines.add(line);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("HATA: Dosya bulunamadı.");
+            return;
+        }
+
+        // 2. ADIM: Dosyayı SIFIRDAN (append: false) tekrar yaz
+        try (FileWriter writer = new FileWriter("cars.txt", false)) { 
+            for (String line : remainingLines) {
+                writer.write(line + "\n"); // Her satırdan sonra alt satıra geç
+            }
+            System.out.println(">> [Sistem] Dosya güncellendi, araç kayıtlardan tamamen silindi.");
+        } catch (IOException e) {
+            System.out.println("HATA: Dosya güncellenirken hata oluştu: " + e.getMessage());
+        }
     }
 }
