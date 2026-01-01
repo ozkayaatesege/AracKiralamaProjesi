@@ -8,6 +8,7 @@ public class Main {
 
     private static CarInventory inventory = new CarInventory();
     private static Scanner scanner = new Scanner(System.in);
+    private static final String Admin_Password="1905";
 
     public static void main(String[] args) {
         
@@ -50,10 +51,14 @@ public class Main {
                     returnCarProcess();
                     break;
                 case 4:
-                    addNewCarProcess();
+                     if(adminDogrulaması()) {
+                    	 addNewCarProcess();
+                     }
                     break;
                 case 5:
-                    deleteCarProcess();
+                    if(adminDogrulaması()) {
+                    	deleteCarProcess();
+                    }
                     break;
                 case 0:
                     System.out.println("Çıkış yapılıyor. İyi günler!");
@@ -96,6 +101,20 @@ public class Main {
             System.out.println("HATA: Dosya okuma hatası: " + e.getMessage());
         }
     }
+        private static boolean adminDogrulaması() {
+        	System.out.println("\n--- GÜVENLİK KONTROLÜ ---");
+            System.out.print("Admin şifresini giriniz: ");
+            String password = scanner.nextLine();
+            
+            if(password.equals(Admin_Password)) {
+            	System.out.println(">> Giriş Başarılı! Yönetici paneline yönlendiriliyorsunuz...");
+            	return true;
+            }else {
+            	System.out.println("HATALI SİFRE!!!");
+            	return false;
+            }
+        }
+    
 
 
     private static void rentCarProcess() {
