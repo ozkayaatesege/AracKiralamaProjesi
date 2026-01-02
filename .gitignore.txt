@@ -1,0 +1,25 @@
+# --- DERLENMİŞ DOSYALAR (Gereksiz) ---
+*.class
+bin/
+build/
+
+# --- IDE AYARLARI (Gereksiz) ---
+.vscode/
+.settings/
+.classpath
+.project
+*.ctxt
+.mtj.tmp/
+
+# --- SIKIŞTIRILMIŞ DOSYALAR ---
+*.jar
+*.war
+*.zip
+*.rar
+
+# --- LOG VE GEÇİCİ DOSYALAR ---
+*.log
+# SADECE geçmiş dosyasını gizle, cars.txt KALSIN.
+kiralama_gecmisi.txt
+
+# (DİKKAT: *.txt yazma, yoksa cars.txt dosyan gider!)
