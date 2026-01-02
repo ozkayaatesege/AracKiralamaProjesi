@@ -204,19 +204,48 @@ public class Main {
             System.out.print("Model: ");
             String model = scanner.nextLine();
 
-            System.out.print("Günlük Fiyat: ");
-            double fiyat = Double.parseDouble(scanner.nextLine());
+            double fiyat = -1;
+            while (fiyat <= 0) {
+                System.out.print("Günlük Fiyat: ");
+                try {
+                    String input = scanner.nextLine();
+                    fiyat = Double.parseDouble(input);
+                    if (fiyat <= 0) {
+                        System.out.println("HATA: Fiyat 0 veya negatif olamaz! Lütfen tekrar giriniz.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("HATA: Lütfen geçerli bir sayı giriniz!");
+                }
+            }
 
             Car newCar = null;
 
             if (type.equalsIgnoreCase("Gas")) {
-                System.out.print("Depo Kapasitesi (Litre): ");
-                double depo = Double.parseDouble(scanner.nextLine());
+            	double depo = -1;
+                while (depo <= 0) {
+                    System.out.print("Depo Kapasitesi (Litre): ");
+                    try {
+                        depo = Double.parseDouble(scanner.nextLine());
+                        if (depo <= 0) System.out.println("HATA: Kapasite pozitif olmalı!");
+                    } catch (NumberFormatException e) {
+                        System.out.println("HATA: Sayısal değer giriniz.");
+                    }
+                }
+                
                 newCar = new GasCar(plaka, model, fiyat, depo);
                 
             } else if (type.equalsIgnoreCase("Electric")) {
-                System.out.print("Batarya Kapasitesi (kWh): ");
-                int batarya = Integer.parseInt(scanner.nextLine());
+            	int batarya = -1;
+                while (batarya <= 0) {
+                    System.out.print("Batarya Kapasitesi (kWh): ");
+                    try {
+                        batarya = Integer.parseInt(scanner.nextLine());
+                        if (batarya <= 0) System.out.println("HATA: Kapasite pozitif olmalı!");
+                    } catch (NumberFormatException e) {
+                        System.out.println("HATA: Tam sayı giriniz.");
+                    }
+                }
+                
                 newCar = new ElectricCar(plaka, model, fiyat, batarya);
             } else {
                 System.out.println("Geçersiz araç tipi! (Gas veya Electric giriniz)");

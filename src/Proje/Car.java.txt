@@ -10,7 +10,12 @@ public abstract class Car implements Rentable {
 		this.plakaKodu=plakaKodu;
 		this.model=model;
 		this.kiralandi=kiralandi;
-		this.gunlukFiyat=gunlukFiyat;
+		if(gunlukFiyat < 0) {
+            System.out.println("HATA: Negatif fiyat girildi, 0 olarak ayarlandı.");
+            this.gunlukFiyat = 0;
+        } else {
+            this.gunlukFiyat = gunlukFiyat;
+        }
 		
 	}
 	
